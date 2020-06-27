@@ -30,9 +30,19 @@ function addTask(e) {
     //Create new link element
     const link = document.createElement('a');
     //Assign a class name 
-    li.link = 'delete-item secondary-content';
+    link.className = 'delete-item secondary-content';
     //Create icon html
     link.innerHTML = '<i class="fa fa-remove"></i>';
+    //Append the link to li 
+    li.appendChild(link);
+    //Append li to ul
+    taskList.appendChild(li);
+    //Clear Input
+    taskInput.value = '';
+
+    console.log(li);
+
+
 
 
 
