@@ -16,6 +16,9 @@ function loadEventListeners() {
     taskList.addEventListener('click', removeTask);
     //Clear task event
     clearBtn.addEventListener('click', clearTasks);
+    //Filter Tasks Event
+    filter.addEventListener('keyup', filterTasks);
+
 }
 
 //Add Task function
@@ -59,4 +62,35 @@ function removeTask(e) {
             e.target.parentElement.parentElement.remove();
         }
     }
+}
+
+//Create Clear tasks function
+function clearTasks() {
+    //this works, but not as fast (efficient)
+    // taskList.innerHTML = '';
+
+    //Faster
+    while (taskList.firstChild) {
+        taskList.removeChild(taskList.firstChild);
+    }
+}
+
+//Create Filter Tasks function
+function filterTasks(e) {
+    //Assign input value of user to constant, make all lower case
+    const text = e.target.value.toLowerCase();
+    //Grab all list items with class of '.collection-item', go through each item with forEach
+    document.querySelectorAll('.collection-item').forEach
+        //use a function to assign the text content of each first child to a constant "item". (Iteraror = task parameter)
+        (function (task) {
+            const item = task.firstChild.textContent;
+            //Check IF item is in any Index position in the array
+            if (item.toLowerCase().indexOf(text) !== -1) {
+                //IF True, THEN display
+                task.style.display = 'block';
+                //ELSE no display
+            } else {
+                task.style.display = 'none';
+            }
+        });
 }
