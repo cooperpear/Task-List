@@ -20,7 +20,6 @@ function addTask(e) {
     if (taskInput.value === '') {
         alert('Add a task');
     }
-
     //Create li element
     const li = document.createElement('li');
     //Assign a class name
@@ -37,14 +36,9 @@ function addTask(e) {
     li.appendChild(link);
     //Append li to ul
     taskList.appendChild(li);
+
     //Clear Input
     taskInput.value = '';
-
-    console.log(li);
-
-
-
-
 
     //prevent default action of "form submit"
     e.preventDefault();
