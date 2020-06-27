@@ -45,11 +45,28 @@ function addTask(e) {
     //Append li to ul
     taskList.appendChild(li);
 
+    //Store in LocalStorage
+    storeTaskInLocalStorage(taskInput.value);
+
     //Clear Input
     taskInput.value = '';
 
     //prevent default action of "form submit"
     e.preventDefault();
+}
+
+//Create Store function
+function storeTaskInLocalStorage(task) {
+    let tasks;
+    //Check in LocalStorage to see if any item currently exists. IF none, THEN create emtpy storage array
+    if (localStorage.getItem('tasks') === null) {
+        tasks = [];
+    } else {
+        //ELSE parse input value into a string (for local storage) with JSON.PARSE and assign to tasks 
+        tasks = JSON.parse(localStorage.getItem('tasks'));
+    }
+    //Add new tasks variable to array
+    tasks.push(task);
 }
 
 //Create Remove task function
