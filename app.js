@@ -10,6 +10,8 @@ loadEventListeners();
 
 //Load all event listeners function creation
 function loadEventListeners() {
+    //DOM Load event, upon loaded call getTasks for locally stored tasks
+    document.addEventListener('DOMContentLoaded', getTasks);
     //Add to task events
     form.addEventListener('submit', addTask);
     //Remove task event
@@ -19,6 +21,37 @@ function loadEventListeners() {
     //Filter Tasks Event
     filter.addEventListener('keyup', filterTasks);
 
+}
+
+//Get tasks from LocalStorage
+function getTasks() {
+    let tasks;
+    //Check in LocalStorage to see if any item currently exists. IF none, THEN create emtpy storage array
+    if (localStorage.getItem('tasks') === null) {
+        tasks = [];
+    } else {
+        //ELSE parse input value into a object with JSON.PARSE and assign to tasks 
+        tasks = JSON.parse(localStorage.getItem('tasks'));
+    }
+    //Loop through each task in Storage and create each DOM element
+    tasks.forEach(function (task) {
+        //Create li element
+        const li = document.createElement('li');
+        //Assign a class name
+        li.className = 'collection-item';
+        //Create text node and append to li
+        li.appendChild(document.createTextNode(task));
+        //Create new link element
+        const link = document.createElement('a');
+        //Assign a class name 
+        link.className = 'delete-item secondary-content';
+        //Create icon html
+        link.innerHTML = '<i class="fa fa-remove"></i>';
+        //Append the link to li 
+        li.appendChild(link);
+        //Append li to ul
+        taskList.appendChild(li);
+    })
 }
 
 //Add Task function
@@ -62,11 +95,13 @@ function storeTaskInLocalStorage(task) {
     if (localStorage.getItem('tasks') === null) {
         tasks = [];
     } else {
-        //ELSE parse input value into a string (for local storage) with JSON.PARSE and assign to tasks 
+        //ELSE parse input value into a object with JSON.PARSE and assign to tasks 
         tasks = JSON.parse(localStorage.getItem('tasks'));
     }
-    //Add new tasks variable to array
+    //Add (push) new task variable to tasks array
     tasks.push(task);
+    //Add tasks to localstorage (must use JSON.stringify, local storage only accepts strings)
+    localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
 //Create Remove task function
@@ -77,8 +112,35 @@ function removeTask(e) {
         //IF true, THEN run confirm statement and IF true, THEN remove element
         if (confirm('Are You Sure?')) {
             e.target.parentElement.parentElement.remove();
+
+            //Remove from Local Storage
+            removeTaskFromLocalStorage(e.target.parentElement.parentElement);
         }
     }
+}
+
+//Create Remove Task From Local Storage Function
+function removeTaskFromLocalStorage(taskItem) {
+    let tasks;
+    //Check in LocalStorage to see if any item currently exists. IF none, THEN create emtpy storage array
+    if (localStorage.getItem('tasks') === null) {
+        tasks = [];
+    } else {
+        //ELSE parse input value into a object with JSON.PARSE and assign to tasks 
+        tasks = JSON.parse(localStorage.getItem('tasks'));
+    }
+
+    //Loop through each task, include index parameter for splice method
+    tasks.forEach(function (task, index) {
+        //Check to see if the text content matches the localstorage value
+        if (taskItem.textContent === task) {
+            //IF true, THEN splice (remove) 1 item at position (index)
+            tasks.splice(index, 1);
+        }
+    });
+
+    localStorage.setItem('tasks', JSONstringify(tasks));
+
 }
 
 //Create Clear tasks function
